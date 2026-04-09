@@ -5,6 +5,14 @@
 #   or:  bash <(curl -s https://raw.githubusercontent.com/JuliusBrussee/caveman/main/hooks/install.sh)
 set -e
 
+# Require node — we use it to merge the hook config into settings.json
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERROR: 'node' is required to install the caveman hooks (used to merge"
+  echo "       the hook config into ~/.claude/settings.json safely)."
+  echo "       Install Node.js from https://nodejs.org and re-run this script."
+  exit 1
+fi
+
 CLAUDE_DIR="$HOME/.claude"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 SETTINGS="$CLAUDE_DIR/settings.json"
@@ -34,6 +42,11 @@ done
 if [ ! -f "$SETTINGS" ]; then
   echo '{}' > "$SETTINGS"
 fi
+
+# Back up existing settings.json before touching it. If the node merge below
+# fails mid-write (disk full, interrupted, etc.), the user can recover from
+# "$SETTINGS.bak" instead of losing their config.
+cp "$SETTINGS" "$SETTINGS.bak"
 
 node -e "
   const fs = require('fs');
