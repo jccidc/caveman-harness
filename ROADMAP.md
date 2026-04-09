@@ -9,6 +9,10 @@ This file lives in the fork, not upstream. Upstream doesn't need to know about o
 | # | Title | Status | Notes |
 |---|-------|--------|-------|
 | [#55](https://github.com/JuliusBrussee/caveman/pull/55) | `feat: optional SessionStart hook + visible [CAVEMAN] statusline badge` | ✅ Merged | Julius merged + added follow-up `4e91954` with `install.sh` + `hooks/README.md`. First contribution landed. |
+| [#57](https://github.com/JuliusBrussee/caveman/pull/57) | `fix(docs): use ANSI-C quoting for bash statusline badge example` | ⏳ Open | QW1. Two-line docs fix. `"\033[..."` → `$'\033[...]'` so bash actually interprets the escape sequence. Currently broken for users who copy-paste the bash snippet. |
+| [#58](https://github.com/JuliusBrussee/caveman/pull/58) | `feat(install): check for node availability and back up settings.json` | ⏳ Open | QW3 + QW4. install.sh safety: fail-fast if node missing + `cp $SETTINGS $SETTINGS.bak` before node merge. |
+| [#59](https://github.com/JuliusBrussee/caveman/pull/59) | `feat(hooks): add uninstall.sh companion to install.sh` | ⏳ Open | QW2. New file `hooks/uninstall.sh`. Symmetric to install.sh. Idempotent node-based removal of caveman entries from settings.json. Preserves unrelated hooks. |
+| [#60](https://github.com/JuliusBrussee/caveman/pull/60) | `feat(skill): add German activation and deactivation triggers` | ⏳ Open | QW5. `kurz`/`kurz bitte`/`kurz&knapp`/`weniger text` → ON, `ausführlich` → OFF. Pure additive to trigger list. Lets sync-skill workflow handle the mirror copies. |
 
 ## Fork-Only Additions
 
