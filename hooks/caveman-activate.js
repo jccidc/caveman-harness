@@ -1,31 +1,15 @@
 #!/usr/bin/env node
-// caveman-harness — activation hook
+// caveman — optional Claude Code SessionStart activation hook
 //
-// - Writes a flag file so the statusline can show a persistent [CAVEMAN] badge
-// - Emits the caveman ruleset (captured as SessionStart context by Claude Code)
+// When wired into ~/.claude/settings.json as a SessionStart hook:
+//   - Writes a flag file at ~/.claude/.caveman-active so a statusline
+//     script can prove caveman mode is loaded (see README for the badge
+//     snippet — SessionStart stdout is otherwise invisible to users)
+//   - Emits a short ruleset reminder as SessionStart context
 //
-// Wire this up in ~/.claude/settings.json under hooks.SessionStart:
-//
-//   {
-//     "hooks": {
-//       "SessionStart": [
-//         {
-//           "hooks": [
-//             {
-//               "type": "command",
-//               "command": "node \"<path-to>/caveman-activate.js\"",
-//               "statusMessage": "Loading caveman mode..."
-//             }
-//           ]
-//         }
-//       ]
-//     }
-//   }
-//
-// The flag file lives at ~/.claude/.caveman-active and is read by the
-// statusline snippet in README.md to render the [CAVEMAN] badge.
-//
-// caveman-harness is a fork of JuliusBrussee/caveman — see README for details.
+// This is a pure addition — if you don't wire it up, nothing changes.
+// Install instructions: see the "Optional: SessionStart Hook" section
+// in README.md.
 
 const fs = require('fs');
 const path = require('path');
@@ -45,7 +29,6 @@ process.stdout.write(
   "Fragments OK. Short synonyms. Pattern: [thing] [action] [reason]. [next step]. " +
   "Not: 'Sure! I'd be happy to help you with that.' " +
   "Yes: 'Bug in auth middleware. Fix:' " +
-  "— Append token savings footer to each response. " +
   "Code/commits/security: write normal. " +
-  "User says 'normal' or 'verbose' to deactivate."
+  "User says 'normal' or 'stop caveman' to deactivate."
 );

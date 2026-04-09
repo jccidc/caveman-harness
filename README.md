@@ -194,60 +194,19 @@ Codex:
 
 Install once. Use in all sessions after that. One rock. That it.
 
-## Visible Mode Badge
+### Auto-Load Hook + Visible Badge (Claude Code only)
 
-Claude Code `SessionStart` hooks inject their stdout as hidden system-reminder context — useful for Claude, invisible to you in the terminal. If you want persistent visual confirmation that caveman mode is loaded, wire up the included activation hook and add a small badge to your statusline.
+Auto-load caveman rules every session with a one-command install:
 
-### 1. Install the activation hook
-
-Copy `hooks/caveman-activate.js` from this repo to `~/.claude/hooks/caveman-activate.js`, then add it to your `~/.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"~/.claude/hooks/caveman-activate.js\"",
-            "statusMessage": "Loading caveman mode..."
-          }
-        ]
-      }
-    ]
-  }
-}
+```bash
+bash <(curl -s https://raw.githubusercontent.com/jccidc/caveman-harness/main/hooks/install.sh)
 ```
 
-The hook writes a flag file at `~/.claude/.caveman-active` and emits the caveman ruleset as session context.
+Or from a cloned repo: `bash hooks/install.sh`
 
-### 2. Add the badge to your statusline
+This installs a SessionStart hook — restart Claude Code and caveman loads automatically. The hook also writes a flag file at `~/.claude/.caveman-active` so you can render a persistent orange `[CAVEMAN]` badge in your statusline (see [`hooks/README.md`](hooks/README.md) for the statusline snippet).
 
-In your Claude Code statusline script (reads JSON on stdin, writes a single line to stdout), check for the flag file and prepend a badge:
-
-```js
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-
-// ...existing statusline logic...
-
-let cavemanBadge = '';
-const cavemanFlag = path.join(os.homedir(), '.claude', '.caveman-active');
-if (fs.existsSync(cavemanFlag)) {
-  // Bold orange [CAVEMAN]
-  cavemanBadge = '\x1b[1;38;5;208m[CAVEMAN]\x1b[0m │ ';
-}
-
-process.stdout.write(`${cavemanBadge}${model} │ ${dirname}`);
-```
-
-Restart Claude Code and an orange `[CAVEMAN]` badge sits in your statusline for the entire session — no more wondering whether the hook fired.
-
-### Why a flag file?
-
-`SessionStart` hook stdout goes into Claude's context, not your terminal. The statusline runs as a separate process and can't see that context. A flag file is the simplest bridge between "the hook ran" and "the statusline can prove it."
+> The hook installer is [now upstream in Julius's original repo](https://github.com/JuliusBrussee/caveman/pull/55) — this fork tracks it, so you get the same installer whether you use `caveman-harness` or the original `JuliusBrussee/caveman`.
 
 ## Usage
 
