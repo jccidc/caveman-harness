@@ -28,10 +28,10 @@ caveman_flag="$HOME/.claude/.caveman-active"
 if [ -f "$caveman_flag" ]; then
   caveman_mode=$(cat "$caveman_flag" 2>/dev/null)
   if [ "$caveman_mode" = "full" ] || [ -z "$caveman_mode" ]; then
-    caveman_text="\033[38;5;172m[CAVEMAN]\033[0m"
+    caveman_text=$'\033[38;5;172m[CAVEMAN]\033[0m'
   else
     caveman_suffix=$(echo "$caveman_mode" | tr '[:lower:]' '[:upper:]')
-    caveman_text="\033[38;5;172m[CAVEMAN:${caveman_suffix}]\033[0m"
+    caveman_text=$'\033[38;5;172m[CAVEMAN:'"${caveman_suffix}"$']\033[0m'
   fi
 fi
 ```
