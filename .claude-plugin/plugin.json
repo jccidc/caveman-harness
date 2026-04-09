@@ -1,8 +1,18 @@
 {
-  "name": "caveman",
-  "description": "Ultra-compressed communication mode. Cuts ~75% of tokens while keeping full technical accuracy by speaking like a caveman.",
+  "name": "caveman-harness",
+  "description": "Ultra-compressed communication mode with Claude Code harness integrations. Fork of JuliusBrussee/caveman adding SessionStart activation hook, visible statusline badge, token savings footer, session summary, and German triggers. Cuts ~75% of tokens while keeping full technical accuracy.",
   "author": {
     "name": "Julius Brussee",
-    "url": "https://github.com/JuliusBrussee"
-  }
+    "url": "https://github.com/JuliusBrussee",
+    "role": "Original creator"
+  },
+  "maintainers": [
+    {
+      "name": "jccidc",
+      "url": "https://github.com/jccidc",
+      "role": "Fork maintainer"
+    }
+  ],
+  "upstream": "https://github.com/JuliusBrussee/caveman",
+  "homepage": "https://github.com/jccidc/caveman-harness"
 }

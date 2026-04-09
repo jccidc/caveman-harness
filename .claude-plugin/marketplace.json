@@ -1,15 +1,15 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "caveman",
-  "description": "Ultra-compressed communication mode for Claude Code. Cuts ~75% of tokens while keeping full technical accuracy.",
+  "name": "caveman-harness",
+  "description": "Ultra-compressed communication mode with Claude Code harness integrations. Fork of JuliusBrussee/caveman adding SessionStart activation hook, visible statusline badge, token savings footer, session summary, and German triggers.",
   "owner": {
-    "name": "Julius Brussee",
-    "url": "https://github.com/JuliusBrussee"
+    "name": "jccidc",
+    "url": "https://github.com/jccidc"
   },
   "plugins": [
     {
-      "name": "caveman",
-      "description": "Talk like caveman. Cut ~75% tokens. Keep all technical accuracy.",
+      "name": "caveman-harness",
+      "description": "Caveman mode + activation hook + visible statusline badge. Based on JuliusBrussee/caveman.",
       "source": "./",
       "category": "productivity"
     }

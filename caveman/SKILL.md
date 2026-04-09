@@ -5,7 +5,9 @@ description: >
   while keeping full technical accuracy. Supports intensity levels: lite, full (default), ultra,
   wenyan-lite, wenyan-full, wenyan-ultra.
   Use when user says "caveman mode", "talk like caveman", "use caveman", "less tokens",
-  "be brief", or invokes /caveman. Also auto-triggers when token efficiency is requested.
+  "be brief", "kurz", "kurz bitte", "kurz&knapp", "weniger text", or invokes /caveman.
+  Also auto-triggers when token efficiency is requested. Appends a per-response token
+  savings footer and shows a cumulative session summary on goodbye/exit.
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.
@@ -61,3 +63,43 @@ Example — destructive op:
 ## Boundaries
 
 Code/commits/PRs: write normal. "stop caveman" or "normal mode": revert. Level persist until changed or session end.
+
+## Multilingual Triggers
+
+Caveman-harness accepts activation phrases in English and German — developers aren't all English-speaking.
+
+| Language | ON | OFF |
+|----------|-----|-----|
+| English | `terse`, `caveman`, `caveman mode`, `less tokens`, `be brief` | `normal`, `normal mode`, `verbose`, `stop caveman` |
+| German | `kurz`, `kurz bitte`, `kurz&knapp`, `weniger text` | `ausführlich`, `normal mode` |
+
+## Token Savings Footer
+
+After each caveman response, append a one-liner showing estimated savings:
+
+```
+> Caveman saved ~X% (~N tokens)
+```
+
+Estimate by comparing the distilled response length against what a normal verbose response would have been. Gives visible feedback that compression is working without adding noise.
+
+**Example:**
+
+> Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:
+> ```js
+> if (Date.now() >= token.exp) { ... }
+> ```
+> Caveman saved ~65% (~50 tokens)
+
+## Session Summary
+
+When user says `goodbye` or `exit`, show cumulative savings for the session:
+
+```
+--- Caveman Session Summary ---
+Responses compressed: N
+Est. tokens saved:    ~X
+Est. savings:         ~Y%
+```
+
+Track a running count of compressed responses and estimated token savings throughout the session.

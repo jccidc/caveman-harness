@@ -2,32 +2,62 @@
   <img src="https://em-content.zobj.net/source/apple/391/rock_1faa8.png" width="120" />
 </p>
 
-<h1 align="center">caveman</h1>
+<h1 align="center">caveman-harness</h1>
 
 <p align="center">
-  <strong>why use many token when few do trick</strong>
+  <strong>caveman + Claude Code harness integrations</strong><br>
+  <em>SessionStart hook · visible statusline badge · token footer · session summary</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/JuliusBrussee/caveman/stargazers"><img src="https://img.shields.io/github/stars/JuliusBrussee/caveman?style=flat&color=yellow" alt="Stars"></a>
-  <a href="https://github.com/JuliusBrussee/caveman/commits/main"><img src="https://img.shields.io/github/last-commit/JuliusBrussee/caveman?style=flat" alt="Last Commit"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/JuliusBrussee/caveman?style=flat" alt="License"></a>
+  <a href="https://github.com/jccidc/caveman-harness/stargazers"><img src="https://img.shields.io/github/stars/jccidc/caveman-harness?style=flat&color=yellow" alt="Stars"></a>
+  <a href="https://github.com/jccidc/caveman-harness/commits/main"><img src="https://img.shields.io/github/last-commit/jccidc/caveman-harness?style=flat" alt="Last Commit"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/jccidc/caveman-harness?style=flat" alt="License"></a>
 </p>
 
 <p align="center">
+  <a href="#what-this-fork-adds">Fork Additions</a> •
   <a href="#before--after">Before/After</a> •
   <a href="#install">Install</a> •
+  <a href="#visible-mode-badge">Visible Badge</a> •
   <a href="#intensity-levels">Levels</a> •
   <a href="#caveman-skills">Skills</a> •
-  <a href="#benchmarks">Benchmarks</a> •
-  <a href="#evals">Evals</a>
+  <a href="#benchmarks">Benchmarks</a>
 </p>
 
 ---
 
+> **This is a fork of [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) by [Julius Brussee](https://github.com/JuliusBrussee).**
+> All the core caveman magic — the intensity levels, wenyan mode, sub-skills, compression tool, benchmarks, evals — is his work. Full credit and thanks to Julius for creating the original and releasing it under MIT. If you like this fork, please also **[star the original](https://github.com/JuliusBrussee/caveman)** ⭐ — that's where the real work lives.
+>
+> `caveman-harness` layers a small set of Claude Code harness integrations on top: a `SessionStart` activation hook, a persistent `[CAVEMAN]` statusline badge, a per-response token savings footer, a goodbye/exit session summary, and German activation triggers. See [What This Fork Adds](#what-this-fork-adds) for details. Everything else below is Julius's original documentation, lightly updated with fork-specific install commands.
+
 A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skill/plugin and Codex plugin that makes agent talk like caveman — cutting **~75% of output tokens** while keeping full technical accuracy. Now with [文言文 mode](#文言文-wenyan-mode), [terse commits](#caveman-commit), [one-line code reviews](#caveman-review), and a [compression tool](#caveman-compress) that cuts **~45% of input tokens** every session.
 
 Based on the viral observation that caveman-speak dramatically reduces LLM token usage without losing technical substance. So we made it a one-line install.
+
+## What This Fork Adds
+
+`caveman-harness` is a **pure superset** of the original — nothing is removed, only added. All additions are **harness-level** (Claude Code hooks, statusline, settings.json), not skill-level. The skill rules themselves are unchanged from Julius's original, plus a few German triggers and two new behavioral rules (footer + session summary).
+
+| Addition | What it does | Scope |
+|---|---|---|
+| `hooks/caveman-activate.js` | SessionStart hook that auto-loads the caveman ruleset into Claude's context on every session start and writes a `~/.claude/.caveman-active` flag file | Claude Code only |
+| Visible `[CAVEMAN]` statusline badge | Persistent orange badge in your statusline proving caveman mode is loaded (SessionStart hook output is otherwise invisible to users) | Claude Code only |
+| Token savings footer | After each caveman response, appends `> Caveman saved ~X% (~N tokens)` so you can see compression working in real time | All tools |
+| Session summary | On `goodbye` / `exit`, shows cumulative responses compressed + estimated tokens saved for the session | All tools |
+| German activation triggers | `kurz`, `kurz bitte`, `kurz&knapp`, `weniger text` → ON; `ausführlich` → OFF | All tools |
+
+**What's unchanged from Julius's original:**
+- All 6 intensity levels (lite / full / ultra / wenyan-lite / wenyan-full / wenyan-ultra)
+- `caveman-commit` and `caveman-review` sub-skills
+- `caveman-compress` standalone Python tool
+- Auto-clarity rules for destructive operations
+- Benchmarks and evals harness
+- Multi-tool support (Cursor, Codex, agents)
+- `caveman.skill` ZIP bundle
+
+If you want the lean original with none of the harness extras, install `JuliusBrussee/caveman` directly.
 
 ## Before / After
 
@@ -122,25 +152,33 @@ Based on the viral observation that caveman-speak dramatically reduces LLM token
 
 ## Install
 
+**Install this fork (with harness additions):**
+
 ```bash
-npx skills add JuliusBrussee/caveman
+npx skills add jccidc/caveman-harness
 ```
 
-`npx skills` supports 40+ agents — Claude Code, GitHub Copilot, Cursor, Windsurf, Cline, and more. To install for a specific agent:
+`npx skills` supports 40+ agents. To install for a specific agent:
 
 ```bash
-npx skills add JuliusBrussee/caveman -a cursor
-npx skills add JuliusBrussee/caveman -a github-copilot
-npx skills add JuliusBrussee/caveman -a cline
-npx skills add JuliusBrussee/caveman -a windsurf
-npx skills add JuliusBrussee/caveman -a codex
+npx skills add jccidc/caveman-harness -a cursor
+npx skills add jccidc/caveman-harness -a github-copilot
+npx skills add jccidc/caveman-harness -a cline
+npx skills add jccidc/caveman-harness -a windsurf
+npx skills add jccidc/caveman-harness -a codex
 ```
 
 Or with Claude Code plugin system:
 
 ```bash
-claude plugin marketplace add JuliusBrussee/caveman
-claude plugin install caveman@caveman
+claude plugin marketplace add jccidc/caveman-harness
+claude plugin install caveman-harness@caveman-harness
+```
+
+**Prefer the lean original?** Install Julius's upstream instead — no harness extras, same core skill:
+
+```bash
+npx skills add JuliusBrussee/caveman
 ```
 
 Codex:
@@ -155,6 +193,61 @@ Codex:
 > **Windows Codex users:** Clone repo → VS Code → Codex Settings → Plugins → find `Caveman` under local marketplace → Install → Reload Window. Also enable `git config core.symlinks true` before cloning (requires developer mode or admin).
 
 Install once. Use in all sessions after that. One rock. That it.
+
+## Visible Mode Badge
+
+Claude Code `SessionStart` hooks inject their stdout as hidden system-reminder context — useful for Claude, invisible to you in the terminal. If you want persistent visual confirmation that caveman mode is loaded, wire up the included activation hook and add a small badge to your statusline.
+
+### 1. Install the activation hook
+
+Copy `hooks/caveman-activate.js` from this repo to `~/.claude/hooks/caveman-activate.js`, then add it to your `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"~/.claude/hooks/caveman-activate.js\"",
+            "statusMessage": "Loading caveman mode..."
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The hook writes a flag file at `~/.claude/.caveman-active` and emits the caveman ruleset as session context.
+
+### 2. Add the badge to your statusline
+
+In your Claude Code statusline script (reads JSON on stdin, writes a single line to stdout), check for the flag file and prepend a badge:
+
+```js
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+// ...existing statusline logic...
+
+let cavemanBadge = '';
+const cavemanFlag = path.join(os.homedir(), '.claude', '.caveman-active');
+if (fs.existsSync(cavemanFlag)) {
+  // Bold orange [CAVEMAN]
+  cavemanBadge = '\x1b[1;38;5;208m[CAVEMAN]\x1b[0m │ ';
+}
+
+process.stdout.write(`${cavemanBadge}${model} │ ${dirname}`);
+```
+
+Restart Claude Code and an orange `[CAVEMAN]` badge sits in your statusline for the entire session — no more wondering whether the hook fired.
+
+### Why a flag file?
+
+`SessionStart` hook stdout goes into Claude's context, not your terminal. The statusline runs as a separate process and can't see that context. A flag file is the simplest bridge between "the hook ran" and "the statusline can prove it."
 
 ## Usage
 
@@ -262,17 +355,25 @@ uv run --with tiktoken python evals/measure.py
 
 Snapshots committed to git. CI runs free. Every number change reviewable as diff. Add a skill, add a prompt — harness pick it up automatically.
 
-## Star This Repo
+## Star Both Repos
 
-If caveman save you mass token, mass money — leave mass star. ⭐
+If caveman save you mass token, mass money — leave mass star on **both**. The original is where the real work is; this fork is a thin harness layer on top. ⭐
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JuliusBrussee/caveman&type=Date)](https://star-history.com/#JuliusBrussee/caveman&Date)
+- **[JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)** — the original (star this one first)
+- **[jccidc/caveman-harness](https://github.com/jccidc/caveman-harness)** — this fork with Claude Code harness additions
+
+[![Star History Chart](https://api.star-history.com/svg?repos=JuliusBrussee/caveman,jccidc/caveman-harness&type=Date)](https://star-history.com/#JuliusBrussee/caveman&jccidc/caveman-harness&Date)
 
 ## Also by Julius Brussee
 
 - **[Blueprint](https://github.com/JuliusBrussee/blueprint)** — specification-driven development for Claude Code. Natural language → blueprints → parallel builds → working software.
 - **[Revu](https://github.com/JuliusBrussee/revu-swift)** — local-first macOS study app with FSRS spaced repetition, decks, exams, and study guides. [revu.cards](https://revu.cards)
 
-## License
+## License & Attribution
 
 MIT — free like mass mammoth on open plain.
+
+- **Original work:** Copyright (c) Julius Brussee — [github.com/JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
+- **Fork additions:** Copyright (c) jccidc — [github.com/jccidc/caveman-harness](https://github.com/jccidc/caveman-harness)
+
+The original LICENSE file is preserved unchanged. All core caveman functionality (skill rules, intensity levels, wenyan variants, sub-skills, compress tool, benchmarks, evals) is Julius's work. This fork adds only harness-level integrations — see [What This Fork Adds](#what-this-fork-adds) for the full delta.
